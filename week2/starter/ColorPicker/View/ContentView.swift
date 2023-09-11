@@ -47,40 +47,70 @@ struct ContentView: View {
 
       RoundedRectangle(cornerRadius: 0)
         .foregroundColor(foregroundColor)
-        .border(.black)
+        .border(Color("RectBorderColor"), width: 5)
       VStack {
-        Text("Red")
+        TitleText(text: "Red")
         HStack {
           Slider(value: $redColor, in: 0...255)
+            .accentColor(.red)
           Text("\(Int(redColor.rounded()))")
         }
       }
       VStack {
-        Text("Green")
+        TitleText(text: "Green")
         HStack {
           Slider(value: $greenColor, in: 0...255)
+            .accentColor(.green)
           Text("\(Int(greenColor.rounded()))")
         }
       }
       VStack {
-        Text("Blue")
+        TitleText(text: "Blue")
         HStack {
           Slider(value: $blueColor, in: 0...255)
+            .accentColor(.blue)
           Text("\(Int(blueColor.rounded()))")
         }
       }
-      Button("Set Color") {
-        foregroundColor = Color(red: redColor / 255, green: greenColor / 255, blue: blueColor / 255)
-      }
+      SetColorButton(redColor: $redColor, greenColor: $greenColor, blueColor: $blueColor, foregroundColor: $foregroundColor)
     }
-    .background(Color.white)
     .padding(20)
 
+  }
+}
+
+struct SetColorButton: View {
+  @Binding var redColor: Double
+  @Binding var greenColor: Double
+  @Binding var blueColor: Double
+  @Binding var foregroundColor: Color
+  
+  var body: some View {
+    Button("Set Color") {
+      foregroundColor = Color(red: redColor / 255, green: greenColor / 255, blue: blueColor / 255)
+    }
+    .padding(20.0)
+    .background(
+      ZStack {
+        Color("ButtonColor")
+        LinearGradient(
+          gradient: Gradient(colors: [Color.white.opacity(0.3), Color.clear]), startPoint: .top, endPoint: .bottom)
+      })
+    .overlay(
+      RoundedRectangle(cornerRadius: Constants.General.roundedRectCornerRadius)
+        .strokeBorder(Color.white, lineWidth: Constants.General.strokeWidth)
+    )
+    .foregroundColor(Color.white)
+    .cornerRadius(Constants.General.roundedRectCornerRadius)
+    .bold()
+    .font(.title3)
   }
 }
 
 struct ContentView_Previews: PreviewProvider {
   static var previews: some View {
     ContentView()
+    ContentView()
+      .preferredColorScheme(.dark)
   }
 }
